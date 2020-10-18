@@ -1,52 +1,59 @@
 package k.example.bottomsheet;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import k.example.bottomsheet.adapter.Rating_adapter;
 import k.example.bottomsheet.model.Rating_item;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements BottomSheetDialog.BottomSheetListener {
 
-    RecyclerView rv_port;
+    RecyclerView rv_comment;
     Rating_adapter adapter;
-    List<Rating_item> mdata;
+    private List<Rating_item> mdata;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button btn_rate=findViewById(R.id.btn_rate);
+        mdata = new ArrayList<>();
+        rv_comment = findViewById(R.id.rcView);
+        Button btn_rate = findViewById(R.id.btn_rate);
+
+
+        BottomSheetDialog bottomSheet = new BottomSheetDialog();
+
         btn_rate.setOnClickListener(v -> {
-            BottomSheetDialog bottomSheet = new BottomSheetDialog();
-            bottomSheet.show(getSupportFragmentManager(),
-                    "ModalBottomSheet");
+            bottomSheet.show(getSupportFragmentManager(), "ModalBottomSheet");
         });
 
-        String dics=getIntent().getStringExtra("dics");
-        String date=getIntent().getStringExtra("date");
-        float rate=getIntent().getFloatExtra("rate",0);
-
-        rv_port=findViewById(R.id.rcView);
-        mdata=new ArrayList<>();
-
-        if (dics!=null) {
-            mdata.add(new Rating_item(rate, dics,date));
-        }
-        adapter=new Rating_adapter(mdata);
-        rv_port.setLayoutManager(new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false));
-        rv_port.setAdapter(adapter);
-
     }
+
+
+    @Override
+    public void onButtonClicked(String dics, String currentDateandTime, float rating) {
+        Rating_item rating_item = new Rating_item();
+        rating_item.setRating(rating);
+        rating_item.setDes(dics);
+        rating_item.setDate(currentDateandTime);
+        mdata.add(rating_item);
+
+        adapter = new Rating_adapter(mdata, this);
+        rv_comment.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        rv_comment.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
+
+
 }

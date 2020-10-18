@@ -1,5 +1,6 @@
 package k.example.bottomsheet.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import k.example.bottomsheet.R;
@@ -18,9 +20,11 @@ import k.example.bottomsheet.model.Rating_item;
 public class Rating_adapter extends RecyclerView.Adapter<Rating_adapter.MyViewHolder>{
 
     List<Rating_item> mdata;
+    private Context ctx;
 
-    public Rating_adapter(List<Rating_item> mdata) {
+    public Rating_adapter(List<Rating_item> mdata, Context ctx) {
         this.mdata = mdata;
+        this.ctx = ctx;
     }
 
     @NonNull
